@@ -656,5 +656,25 @@ const products = [
       "apparel",
       "mens"
     ]
+  },
+  {
+    id: "e14c9e53-6422-4f56-b2b2-7cd764325ae5",
+    image: "images/products/backpack.jpg",
+    name: "Exercise packpack",
+    rating: {
+      stars: 5.0,
+      count: 4000
+    },
+    priceCents: 1313
+  },
+  {
+    id: "056f123c-c670-401a-8787-639f1587f5b9",
+    image: "images/products/umbrella.jpg",
+    name: "Exercise umbrella",
+    rating: {
+      stars: 5.0,
+      count: 1
+    },
+    priceCents: 1313
   }
 ];
