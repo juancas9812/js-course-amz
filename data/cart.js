@@ -133,3 +133,30 @@ export function emptyCart() {
   cart = [];
   saveToStorage();
 }
+
+export function addToCartFromPrevious(productId) {
+  let matchingItem;
+  cart.forEach((cartItem) => {
+    if (productId === cartItem.productId) {
+      matchingItem = cartItem;
+    }
+  });
+
+  const selectorItem = document.querySelector(`.js-order-quantity-${productId}`);
+  let quantity = 1;
+  if (selectorItem){
+    quantity = Number(selectorItem.value);
+  }
+
+  if (matchingItem) {
+    matchingItem.quantity+=quantity
+  } else {
+    cart.push({
+      productId,
+      quantity,
+      deliveryOptionId: '1'
+    })
+  }
+
+  saveToStorage();
+}

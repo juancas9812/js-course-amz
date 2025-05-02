@@ -1,6 +1,8 @@
 import { orders, formatOrderDate } from "../../data/order.js";
 import formatCurrency from "../utils/money.js";
 import { products, getProduct } from "../../data/products.js";
+import { addToCartFromPrevious } from "../../data/cart.js";
+import { renderOrderHeader } from "./ordersHeader.js";
 
 
 export function renderOrderGrid() {
@@ -39,7 +41,13 @@ export function renderOrderGrid() {
   orders.forEach((order) => {
     renderOrderDetails(order.products, order.id);
   });
-  
+  document.querySelectorAll('.js-buy-again-button').forEach((button) => {
+    button.addEventListener('click', () => {
+      const productId = button.dataset.productId;
+      addToCartFromPrevious(productId);
+      renderOrderHeader();
+    });
+  });
 }
 
 
@@ -64,14 +72,14 @@ function renderOrderDetails(orderProducts,orderId) {
         <div class="product-quantity">
           Quantity: ${product.quantity}
         </div>
-        <button class="buy-again-button button-primary">
+        <button class="buy-again-button button-primary js-buy-again-button js-buy-again-button-${product.productId}" data-product-id = ${product.productId}>
           <img class="buy-again-icon" src="images/icons/buy-again.png">
           <span class="buy-again-message">Buy it again</span>
         </button>
       </div>
 
       <div class="product-actions">
-        <a href="tracking.html?orderId=123&productId=456">
+        <a href="tracking.html?orderId=${orderId}&productId=${product.productId}">
           <button class="track-package-button button-secondary">
             Track package
           </button>
