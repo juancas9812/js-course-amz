@@ -127,3 +127,9 @@ export async function loadCartFetch() {
   console.log(response);
   return response;
 }
+
+
+export function emptyCart() {
+  cart = [];
+  saveToStorage();
+}

@@ -1,4 +1,4 @@
-import { cart, calculateCartQuantity } from "../../data/cart.js";
+import { cart, calculateCartQuantity, emptyCart } from "../../data/cart.js";
 import { getProduct } from "../../data/products.js";
 import { getDeliveryOption } from "../../data/deliveryOptions.js";
 import formatCurrency from "../utils/money.js";
@@ -57,23 +57,28 @@ export function renderPaymentSummary() {
   document.querySelector('.js-payment-summary').innerHTML = paymentSummaryHTML;
 
   document.querySelector('.js-place-order').addEventListener('click',async () => {
-    try{
-      const response = await fetch('https://supersimplebackend.dev/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({cart:cart})
-      });
-
-      const order = await response.json();
-      addOrder(order);
-
-    } catch (error) {
-      console.log('Unexpected error. Try again later.')
+    if (cart.length !==0) {
+      try{
+        const response = await fetch('https://supersimplebackend.dev/orders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({cart:cart})
+        });
+  
+        const order = await response.json();
+        addOrder(order);
+        emptyCart();
+  
+      } catch (error) {
+        console.log('Unexpected error. Try again later.')
+      }
+      
+      window.location.href = 'orders.html';
+    } else {
+      alert('Unable to place order. Please add products to the cart');
     }
-
-    window.location.href = 'orders.html'
     
   });
 }
