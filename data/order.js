@@ -15,6 +15,15 @@ export function formatOrderDate(orderDate) {
   return dayjs(orderDate).format('MMMM D');
 }
 
+export function getOrder(orderId) {
+  let matchingOrder;
+  orders.forEach((order) => {
+    if (orderId === order.id) {
+      matchingOrder = order;
+    }
+  });
+  return matchingOrder;
+}
 
 
 /*
