@@ -31,22 +31,24 @@ export async function renderTrackingPage() {
     <img class="product-image" src="${product.image}">
 
     <div class="progress-labels-container">
-      <div class="progress-label">
+      <div class="progress-label js-progress-label">
         Preparing
       </div>
-      <div class="progress-label current-status">
+      <div class="progress-label current-status js-progress-label">
         Shipped
       </div>
-      <div class="progress-label">
+      <div class="progress-label js-progress-label">
         Delivered
       </div>
     </div>
 
     <div class="progress-bar-container">
-      <div class="progress-bar"></div>
+      <div class="progress-bar" style="width: ${getTrackingProgress(orderProduct.estimatedDeliveryTime, order.orderTime)}%"></div>
     </div>
   `
   document.querySelector('.js-order-tracking').innerHTML = trackingHTML;
+
+  getTrackingState(orderProduct.estimatedDeliveryTime, order.orderTime);
 }
 
 
@@ -63,3 +65,29 @@ function getTrackedProduct(productId, order){
   });
   return matchingProduct;
 }
+
+function getTrackingProgress(delivery,order) {
+  const currentTime = dayjs();
+  const deliveryTime = dayjs(delivery);
+  const orderTime = dayjs(order);
+  return Math.round(((currentTime.diff(orderTime))/(deliveryTime.diff(orderTime)))*100);
+}
+
+function getTrackingState(delivery,order) {
+  const progress = getTrackingProgress(delivery,order);
+  const allElements = document.querySelectorAll('.js-progress-label');
+  allElements.forEach((element) => {
+    element.classList.remove('current-status');
+  })
+  if (progress > 0 && progress <=49 ){
+    allElements[0].classList.add('current-status');
+    return 'Preparing'
+  } else if (progress < 100) {
+    allElements[1].classList.add('current-status');
+    return 'Shipped'
+  } else {
+    allElements[2].classList.add('current-status');
+    return 'Delivered'
+  }
+}
+
